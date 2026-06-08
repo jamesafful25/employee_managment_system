@@ -115,7 +115,7 @@ jobs:
         run: |
           echo "ECR_REPO=$ECR_REPO"
 
-          IMAGE="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${GITHUB_SHA}"
+          IMAGE="${ECR_REPO}:${GITHUB_SHA}"
 
           echo "Building image: $IMAGE"
 
