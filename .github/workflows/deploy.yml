@@ -79,10 +79,21 @@ jobs:
         id: out
         working-directory: infra
         run: |
-          echo "ecr_repo=$(terraform output -raw ecr_repo)" >> $GITHUB_OUTPUT
-          echo "ecs_cluster=$(terraform output -raw ecs_cluster)" >> $GITHUB_OUTPUT
-          echo "ecs_service=$(terraform output -raw ecs_service)" >> $GITHUB_OUTPUT
-          echo "rds_identifier=$(terraform output -raw db_instance_identifier)" >> $GITHUB_OUTPUT
+          set -e
+
+          echo "Fetching Terraform outputs..."
+
+          ECR_REPO=$(terraform output -raw ecr_repo)
+          ECS_CLUSTER=$(terraform output -raw ecs_cluster)
+          ECS_SERVICE=$(terraform output -raw ecs_service)
+          RDS_ID=$(terraform output -raw rds_identifier)
+
+          echo "ecr_repo=$ECR_REPO" >> $GITHUB_OUTPUT
+          echo "ecs_cluster=$ECS_CLUSTER" >> $GITHUB_OUTPUT
+          echo "ecs_service=$ECS_SERVICE" >> $GITHUB_OUTPUT
+          echo "rds_identifier=$RDS_ID" >> $GITHUB_OUTPUT
+
+          echo "RDS_ID=$RDS_ID"
 
 
 # ─────────────────────────────
