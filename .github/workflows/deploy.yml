@@ -1,0 +1,179 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
+  APP_NAME: emp-mgmt
+
+jobs:
+
+# ─────────────────────────────
+# 1. TEST
+# ─────────────────────────────
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run lint
+
+
+# ─────────────────────────────
+# 2. TERRAFORM APPLY (INFRA)
+# ─────────────────────────────
+  terraform:
+    needs: test
+    runs-on: ubuntu-latest
+
+    outputs:
+      ecr_repo: ${{ steps.out.outputs.ecr_repo }}
+      ecs_cluster: ${{ steps.out.outputs.ecs_cluster }}
+      ecs_service: ${{ steps.out.outputs.ecs_service }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.0
+
+      - name: Terraform Init
+        working-directory: infra
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: infra
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        working-directory: infra
+        run: terraform apply -auto-approve tfplan
+
+      - name: Capture Terraform Outputs
+        id: out
+        working-directory: infra
+        run: |
+          echo "ecr_repo=$(terraform output -raw ecr_repo)" >> $GITHUB_OUTPUT
+          echo "ecs_cluster=$(terraform output -raw ecs_cluster)" >> $GITHUB_OUTPUT
+          echo "ecs_service=$(terraform output -raw ecs_service)" >> $GITHUB_OUTPUT
+
+
+# ─────────────────────────────
+# 3. BUILD & PUSH DOCKER IMAGE
+# ─────────────────────────────
+  build:
+    needs: terraform
+    runs-on: ubuntu-latest
+
+    outputs:
+      image: ${{ steps.build.outputs.image }}
+
+    env:
+      ECR_REPO: ${{ needs.terraform.outputs.ecr_repo }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build & Push Docker Image
+        id: build
+        run: |
+          IMAGE=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${ECR_REPO}:${{ github.sha }}
+
+          docker build -t $IMAGE ./backend
+          docker push $IMAGE
+
+          echo "image=$IMAGE" >> $GITHUB_OUTPUT
+
+
+# ─────────────────────────────
+# 4. MIGRATION (SAFE VERSION)
+# ─────────────────────────────
+  migrate:
+    needs: [terraform, build]
+    runs-on: ubuntu-latest
+
+    env:
+      ECS_CLUSTER: ${{ needs.terraform.outputs.ecs_cluster }}
+      APP_NAME: emp-mgmt
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Wait for RDS
+        run: |
+          aws rds wait db-instance-available \
+            --db-instance-identifier ${{ secrets.RDS_INSTANCE_ID }}
+
+      - name: Run migration task in ECS
+        run: |
+          aws ecs run-task \
+            --cluster $ECS_CLUSTER \
+            --task-definition ${APP_NAME}-task \
+            --launch-type FARGATE \
+            --overrides '{"containerOverrides":[{"name":"app","command":["npm","run","migrate"]}]}'
+
+
+# ─────────────────────────────
+# 5. DEPLOY TO ECS
+# ─────────────────────────────
+  deploy:
+    needs: [terraform, build, migrate]
+    runs-on: ubuntu-latest
+
+    env:
+      ECS_CLUSTER: ${{ needs.terraform.outputs.ecs_cluster }}
+      ECS_SERVICE: ${{ needs.terraform.outputs.ecs_service }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Force ECS Deployment
+        run: |
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER \
+            --service $ECS_SERVICE \
+            --force-new-deployment

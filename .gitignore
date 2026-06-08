@@ -19,3 +19,17 @@ uploads/
 
 # OS files
 .DS_Store
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+
+# keep lock file (important)
+!**/.terraform.lock.hcl
+
+# OS junk
+*.exe
+.DS_Store

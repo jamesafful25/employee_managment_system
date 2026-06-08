@@ -31,6 +31,7 @@ const Employee = sequelize.define('Employee', {
         type: DataTypes.DATE,
         allowNull: true,
     },
+    timestamps: true
 });
 
 module.exports = Employee;
