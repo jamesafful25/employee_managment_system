@@ -49,6 +49,8 @@ jobs:
       ecs_cluster: ${{ steps.out.outputs.ecs_cluster }}
       ecs_service: ${{ steps.out.outputs.ecs_service }}
       rds_identifier: ${{ steps.out.outputs.rds_identifier }}
+      private_subnets: ${{ steps.out.outputs.private_subnets }}
+      ecs_security_group_id: ${{ steps.out.outputs.ecs_security_group_id }}
 
     steps:
       - uses: actions/checkout@v4
@@ -81,19 +83,12 @@ jobs:
         run: |
           set -e
 
-          echo "Fetching Terraform outputs..."
-
-          ECR_REPO=$(terraform output -raw ecr_repo)
-          ECS_CLUSTER=$(terraform output -raw ecs_cluster)
-          ECS_SERVICE=$(terraform output -raw ecs_service)
-          RDS_ID=$(terraform output -raw rds_identifier)
-
-          echo "ecr_repo=$ECR_REPO" >> $GITHUB_OUTPUT
-          echo "ecs_cluster=$ECS_CLUSTER" >> $GITHUB_OUTPUT
-          echo "ecs_service=$ECS_SERVICE" >> $GITHUB_OUTPUT
-          echo "rds_identifier=$RDS_ID" >> $GITHUB_OUTPUT
-
-          echo "RDS_ID=$RDS_ID"
+          echo "ecr_repo=$(terraform output -raw ecr_repo)" >> $GITHUB_OUTPUT
+          echo "ecs_cluster=$(terraform output -raw ecs_cluster)" >> $GITHUB_OUTPUT
+          echo "ecs_service=$(terraform output -raw ecs_service)" >> $GITHUB_OUTPUT
+          echo "rds_identifier=$(terraform output -raw rds_identifier)" >> $GITHUB_OUTPUT
+          echo "private_subnets=$(terraform output -json private_subnets | jq -c '.')" >> $GITHUB_OUTPUT
+          echo "ecs_security_group_id=$(terraform output -raw ecs_security_group_id)" >> $GITHUB_OUTPUT
 
 
 # ─────────────────────────────
@@ -124,8 +119,6 @@ jobs:
       - name: Build & Push Docker Image
         id: build
         run: |
-          echo "ECR_REPO=$ECR_REPO"
-
           IMAGE="${ECR_REPO}:${GITHUB_SHA}"
 
           echo "Building image: $IMAGE"
@@ -149,14 +142,16 @@ jobs:
       APP_NAME: emp-mgmt
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Debug RDS ID
-        run: echo "RDS = $RDS_ID"
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Wait for RDS
         run: |
@@ -165,13 +160,20 @@ jobs:
 
       - name: Run migration task in ECS
         run: |
+          set -e
+
+          SUBNETS=$(echo '${{ needs.terraform.outputs.private_subnets }}' | jq -r '. | join(",")')
+          SG="${{ needs.terraform.outputs.ecs_security_group_id }}"
+
+          echo "Subnets: $SUBNETS"
+          echo "SG: $SG"
+
           aws ecs run-task \
             --cluster $ECS_CLUSTER \
             --task-definition ${APP_NAME}-task \
             --launch-type FARGATE \
-            --network-configuration "awsvpcConfiguration={subnets=[subnet-xxx,subnet-yyy],securityGroups=[sg-xxx],assignPublicIp=ENABLED}" \
+            --network-configuration "awsvpcConfiguration={subnets=[$SUBNETS],securityGroups=[$SG],assignPublicIp=ENABLED}" \
             --overrides '{"containerOverrides":[{"name":"app","command":["npm","run","migrate"]}]}'
-
 
 # ─────────────────────────────
 # 5. DEPLOY
