@@ -11,6 +11,7 @@ permissions:
 env:
   AWS_REGION: us-east-1
   APP_NAME: emp-mgmt
+  ACCOUNT_ID: 448161422880   # IMPORTANT: your AWS account ID
 
 jobs:
 
@@ -34,8 +35,6 @@ jobs:
 
       - run: npm ci
       - run: npm test
-      # NOTE: lint will fail unless you add eslint later
-      # - run: npm run lint
 
 
 # ─────────────────────────────
@@ -109,13 +108,19 @@ jobs:
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Validate ECR Repository Exists
+        run: |
+          echo "Checking ECR repo..."
+          aws ecr describe-repositories \
+            --repository-names emp-mgmt-repo
+
       - name: Build & Push Docker Image
         id: build
         run: |
           echo "ECR_REPO=$ECR_REPO"
           echo "GITHUB_SHA=$GITHUB_SHA"
 
-          IMAGE="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${ECR_REPO}:${GITHUB_SHA}"
+          IMAGE="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/emp-mgmt-repo:${GITHUB_SHA}"
 
           echo "Building image: $IMAGE"
 
