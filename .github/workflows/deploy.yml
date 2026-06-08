@@ -39,7 +39,7 @@ jobs:
 
 
 # ─────────────────────────────
-# 2. TERRAFORM APPLY (INFRA)
+# 2. TERRAFORM APPLY
 # ─────────────────────────────
   terraform:
     needs: test
@@ -75,7 +75,7 @@ jobs:
         working-directory: infra
         run: terraform apply -auto-approve tfplan
 
-      - name: Capture Terraform Outputs
+      - name: Capture outputs
         id: out
         working-directory: infra
         run: |
@@ -85,7 +85,7 @@ jobs:
 
 
 # ─────────────────────────────
-# 3. BUILD & PUSH DOCKER IMAGE
+# 3. BUILD & PUSH IMAGE
 # ─────────────────────────────
   build:
     needs: terraform
@@ -111,7 +111,9 @@ jobs:
       - name: Build & Push Docker Image
         id: build
         run: |
-          IMAGE=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${ECR_REPO}:${{ github.sha }}
+          IMAGE=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${ECR_REPO}:${GITHUB_SHA}
+
+          echo "Building image: $IMAGE"
 
           docker build -t $IMAGE ./backend
           docker push $IMAGE
@@ -120,7 +122,7 @@ jobs:
 
 
 # ─────────────────────────────
-# 4. MIGRATION (SAFE VERSION)
+# 4. MIGRATION
 # ─────────────────────────────
   migrate:
     needs: [terraform, build]
@@ -152,7 +154,7 @@ jobs:
 
 
 # ─────────────────────────────
-# 5. DEPLOY TO ECS
+# 5. DEPLOY
 # ─────────────────────────────
   deploy:
     needs: [terraform, build, migrate]
