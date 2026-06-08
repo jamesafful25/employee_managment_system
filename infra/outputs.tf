@@ -9,3 +9,11 @@ output "ecs_cluster" {
 output "ecs_service" {
   value = module.ecs.service_name
 }
+
+output "rds_identifier" {
+  value = module.rds.db_instance_identifier
+}
+
+output "db_secret_arn" {
+  value = module.rds.db_secret_arn
+}
