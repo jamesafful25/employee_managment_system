@@ -169,6 +169,7 @@ jobs:
             --cluster $ECS_CLUSTER \
             --task-definition ${APP_NAME}-task \
             --launch-type FARGATE \
+            --network-configuration "awsvpcConfiguration={subnets=[subnet-xxx,subnet-yyy],securityGroups=[sg-xxx],assignPublicIp=ENABLED}" \
             --overrides '{"containerOverrides":[{"name":"app","command":["npm","run","migrate"]}]}'
 
 
