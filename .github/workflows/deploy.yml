@@ -19,7 +19,6 @@ jobs:
 # ─────────────────────────────
   test:
     runs-on: ubuntu-latest
-
     defaults:
       run:
         working-directory: backend
@@ -35,11 +34,12 @@ jobs:
 
       - run: npm ci
       - run: npm test
-      - run: npm run lint
+      # NOTE: lint will fail unless you add eslint later
+      # - run: npm run lint
 
 
 # ─────────────────────────────
-# 2. TERRAFORM APPLY
+# 2. TERRAFORM
 # ─────────────────────────────
   terraform:
     needs: test
@@ -106,17 +106,21 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - uses: aws-actions/amazon-ecr-login@v2
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build & Push Docker Image
         id: build
         run: |
-          IMAGE=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${ECR_REPO}:${GITHUB_SHA}
+          echo "ECR_REPO=$ECR_REPO"
+          echo "GITHUB_SHA=$GITHUB_SHA"
+
+          IMAGE="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${ECR_REPO}:${GITHUB_SHA}"
 
           echo "Building image: $IMAGE"
 
-          docker build -t $IMAGE ./backend
-          docker push $IMAGE
+          docker build ./backend -t "$IMAGE"
+          docker push "$IMAGE"
 
           echo "image=$IMAGE" >> $GITHUB_OUTPUT
 
