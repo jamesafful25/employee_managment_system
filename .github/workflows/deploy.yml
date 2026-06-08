@@ -11,7 +11,7 @@ permissions:
 env:
   AWS_REGION: us-east-1
   APP_NAME: emp-mgmt
-  ACCOUNT_ID: 448161422880   # IMPORTANT: your AWS account ID
+  ACCOUNT_ID: 448161422880
 
 jobs:
 
@@ -48,6 +48,7 @@ jobs:
       ecr_repo: ${{ steps.out.outputs.ecr_repo }}
       ecs_cluster: ${{ steps.out.outputs.ecs_cluster }}
       ecs_service: ${{ steps.out.outputs.ecs_service }}
+      rds_identifier: ${{ steps.out.outputs.rds_identifier }}
 
     steps:
       - uses: actions/checkout@v4
@@ -81,6 +82,7 @@ jobs:
           echo "ecr_repo=$(terraform output -raw ecr_repo)" >> $GITHUB_OUTPUT
           echo "ecs_cluster=$(terraform output -raw ecs_cluster)" >> $GITHUB_OUTPUT
           echo "ecs_service=$(terraform output -raw ecs_service)" >> $GITHUB_OUTPUT
+          echo "rds_identifier=$(terraform output -raw db_instance_identifier)" >> $GITHUB_OUTPUT
 
 
 # ─────────────────────────────
@@ -108,19 +110,12 @@ jobs:
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Validate ECR Repository Exists
-        run: |
-          echo "Checking ECR repo..."
-          aws ecr describe-repositories \
-            --repository-names emp-mgmt-repo
-
       - name: Build & Push Docker Image
         id: build
         run: |
           echo "ECR_REPO=$ECR_REPO"
-          echo "GITHUB_SHA=$GITHUB_SHA"
 
-          IMAGE="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/emp-mgmt-repo:${GITHUB_SHA}"
+          IMAGE="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${GITHUB_SHA}"
 
           echo "Building image: $IMAGE"
 
@@ -139,6 +134,7 @@ jobs:
 
     env:
       ECS_CLUSTER: ${{ needs.terraform.outputs.ecs_cluster }}
+      RDS_ID: ${{ needs.terraform.outputs.rds_identifier }}
       APP_NAME: emp-mgmt
 
     steps:
@@ -148,10 +144,13 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Debug RDS ID
+        run: echo "RDS = $RDS_ID"
+
       - name: Wait for RDS
         run: |
           aws rds wait db-instance-available \
-            --db-instance-identifier ${{ secrets.RDS_INSTANCE_ID }}
+            --db-instance-identifier "$RDS_ID"
 
       - name: Run migration task in ECS
         run: |
