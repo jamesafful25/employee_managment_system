@@ -48,37 +48,40 @@ passport.use(
 );
 
 // google strategy
-passport.use(new GoogleStrategy({
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.GOOGLE_CALLBACK_URL,
-    },
-    async(accessToken, refreshToken, profile, done) => {
-        try {
-            // check if employee exists with google id
-            const employee = await Employee.findOne({ where: { google_id: profile.id } });
-            if (employee) return done(null, employee);
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    passport.use(new GoogleStrategy({
+            clientID: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            callbackURL: process.env.GOOGLE_CALLBACK_URL,
+        },
+        async(accessToken, refreshToken, profile, done) => {
+            try {
+                // check if employee exists with google id
+                const employee = await Employee.findOne({
+                    where: { google_id: profile.id },
+                });
 
-            // check if email already registered locally — link google account
-            const existing = await Employee.findOne({
-                where: { email: profile.emails[0].value },
-            });
+                if (employee) return done(null, employee);
 
-            if (existing) {
-                // link google id to existing account
-                existing.google_id = profile.id;
-                await existing.save();
-                return done(null, existing);
+                // check if email already registered locally — link google account
+                const existing = await Employee.findOne({
+                    where: { email: profile.emails[0].value },
+                });
+
+                if (existing) {
+                    existing.google_id = profile.id;
+                    await existing.save();
+                    return done(null, existing);
+                }
+
+                // employee not pre-registered by admin — deny access
+                return done(null, false, {
+                    message: "Account not found, contact admin to register you",
+                });
+            } catch (err) {
+                return done(err);
             }
-
-            // employee not pre-registered by admin — deny access
-            return done(null, false, {
-                message: 'Account not found, contact admin to register you',
-            });
-        } catch (err) {
-            return done(err);
         }
-    }
-));
-
+    ));
+}
 module.exports = passport;
