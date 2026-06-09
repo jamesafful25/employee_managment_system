@@ -124,7 +124,8 @@ jobs:
           echo "Building image: $IMAGE"
 
           docker build ./backend -t "$IMAGE"
-          docker push "$IMAGE"
+          docker tag "$IMAGE" "${ECR_REPO}:latest"
+          docker push "${ECR_REPO}:latest"
 
           echo "image=$IMAGE" >> $GITHUB_OUTPUT
 

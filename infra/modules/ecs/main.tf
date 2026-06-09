@@ -7,12 +7,16 @@ resource "aws_ecs_cluster" "main" {
   }
 }
 
+# -----------------------------
+# ECS TASK DEFINITION
+# -----------------------------
 resource "aws_ecs_task_definition" "app" {
   family                   = "${var.app_name}-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = 512
-  memory                   = 1024
+
+  cpu    = 512
+  memory = 1024
 
   execution_role_arn = aws_iam_role.ecs_execution.arn
   task_role_arn      = aws_iam_role.ecs_task.arn
@@ -35,7 +39,6 @@ resource "aws_ecs_task_definition" "app" {
         }
       ]
 
-      # 
       secrets = [
         {
           name      = "DB_PASSWORD"
@@ -46,15 +49,22 @@ resource "aws_ecs_task_definition" "app" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = "/ecs/${var.app_name}"
+          awslogs-group         = aws_cloudwatch_log_group.ecs.name
           awslogs-region        = var.aws_region
           awslogs-stream-prefix = "app"
         }
       }
     }
   ])
+
+  depends_on = [
+    aws_cloudwatch_log_group.ecs
+  ]
 }
 
+# -----------------------------
+# ECS SERVICE
+# -----------------------------
 resource "aws_ecs_service" "app" {
   name            = "${var.app_name}-service"
   cluster         = aws_ecs_cluster.main.id
@@ -64,8 +74,8 @@ resource "aws_ecs_service" "app" {
   launch_type   = "FARGATE"
 
   network_configuration {
-    subnets         = var.private_subnet_ids
-    security_groups = [aws_security_group.ecs.id]
+    subnets          = var.private_subnet_ids
+    security_groups  = [aws_security_group.ecs.id]
     assign_public_ip = false
   }
 
@@ -82,4 +92,3 @@ resource "aws_ecs_service" "app" {
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
 }
-
