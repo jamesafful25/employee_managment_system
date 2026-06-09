@@ -34,6 +34,6 @@ output "db_port" {
   value = module.rds.db_port
 }
 
-output "rds_endpoint" {
-  value = module.rds.endpoint
+output "rds_db_host" {
+  value = module.rds.db_host
 }

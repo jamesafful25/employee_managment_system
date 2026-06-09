@@ -14,6 +14,3 @@ output "db_port" {
   value = aws_db_instance.main.port
 }
 
-output "endpoint" {
-  value = aws_db_instance.main.endpoint
-}
