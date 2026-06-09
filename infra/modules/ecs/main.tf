@@ -47,7 +47,7 @@ resource "aws_ecs_task_definition" "app" {
         },
         {
           name  = "DB_USER"
-          value = var.db_user
+           valueFrom = "${var.db_secret_arn}:username::"
         },
         {
           name  = "DB_NAME"
@@ -57,9 +57,9 @@ resource "aws_ecs_task_definition" "app" {
 
       secrets = [
         {
-          name      = "DB_PASSWORD"
-          valueFrom = var.db_secret_arn
-        }
+        name      = "DB_PASSWORD"
+        valueFrom = "${var.db_secret_arn}:password::"
+         }
       ]
 
       logConfiguration = {
