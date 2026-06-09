@@ -37,3 +37,11 @@ variable "vpc_id" {
 variable "alb_security_group_id" {
   type = string
 }
+
+variable "db_host" {
+  type = string
+}
+
+variable "db_port" {
+  type = string
+}

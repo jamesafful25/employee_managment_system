@@ -36,6 +36,14 @@ resource "aws_ecs_task_definition" "app" {
         {
           name  = "NODE_ENV"
           value = "production"
+        },
+        {
+          name  = "DB_HOST"
+          value = var.db_host
+        },
+        {
+          name  = "DB_PORT"
+          value = var.db_port
         }
       ]
 

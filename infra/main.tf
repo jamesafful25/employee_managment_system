@@ -40,17 +40,20 @@ module "alb" {
 module "ecs" {
   source = "./modules/ecs"
 
-  app_name           = var.app_name
-  ecr_repo_url       = module.ecr.repository_url
-  container_port     = var.container_port
-  db_secret_arn      = module.rds.db_secret_arn
-  aws_region         = var.aws_region
-  private_subnet_ids = module.vpc.private_subnet_ids
-  desired_count      = var.desired_count
-  target_group_arn   = module.alb.target_group_arn
+  app_name              = var.app_name
+  ecr_repo_url          = module.ecr.repository_url
+  container_port        = var.container_port
+  db_secret_arn         = module.rds.db_secret_arn
+  aws_region            = var.aws_region
+  private_subnet_ids    = module.vpc.private_subnet_ids
+  desired_count         = var.desired_count
+  target_group_arn      = module.alb.target_group_arn
   vpc_id                = module.vpc.vpc_id
   alb_security_group_id = module.alb.alb_security_group_id
+  db_host               = module.rds.db_host
+  db_port               = module.rds.db_port
 }
+
 
 # -------------------------
 # RDS (Database)
@@ -65,7 +68,8 @@ module "rds" {
 
   db_name     = var.db_name
   db_username = var.db_username
-  
+
+
 }
 
 # -------------------------

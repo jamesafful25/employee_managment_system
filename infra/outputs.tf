@@ -25,3 +25,11 @@ output "private_subnets" {
 output "ecs_security_group_id" {
   value = module.ecs.security_group_id
 }
+
+output "db_host" {
+  value = module.rds.db_host
+}
+
+output "db_port" {
+  value = module.rds.db_port
+}
