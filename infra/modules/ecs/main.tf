@@ -32,6 +32,9 @@ resource "aws_ecs_task_definition" "app" {
         }
       ]
 
+      # -----------------------------
+      # ENVIRONMENT VARIABLES (non-secret)
+      # -----------------------------
       environment = [
         {
           name  = "NODE_ENV"
@@ -46,22 +49,28 @@ resource "aws_ecs_task_definition" "app" {
           value = var.db_port
         },
         {
-          name  = "DB_USER"
-           valueFrom = "${var.db_secret_arn}:username::"
-        },
-        {
           name  = "DB_NAME"
           value = var.db_name
         }
       ]
 
+      # -----------------------------
+      # SECRETS (from AWS Secrets Manager)
+      # -----------------------------
       secrets = [
         {
-        name      = "DB_PASSWORD"
-        valueFrom = "${var.db_secret_arn}:password::"
-         }
+          name      = "DB_USER"
+          valueFrom = "${var.db_secret_arn}:username::"
+        },
+        {
+          name      = "DB_PASSWORD"
+          valueFrom = "${var.db_secret_arn}:password::"
+        }
       ]
 
+      # -----------------------------
+      # LOGGING
+      # -----------------------------
       logConfiguration = {
         logDriver = "awslogs"
         options = {
