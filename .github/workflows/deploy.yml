@@ -177,7 +177,7 @@ jobs:
             --overrides '{"containerOverrides":[{"name":"app","command":["npm","run","migrate"]}]}'
 
 # ─────────────────────────────
-# 5. DEPLOY
+# 5. DEPLOY (BACKEND)
 # ─────────────────────────────
   deploy:
     needs: [terraform, build, migrate]
@@ -202,3 +202,37 @@ jobs:
             --cluster $ECS_CLUSTER \
             --service $ECS_SERVICE \
             --force-new-deployment
+
+
+# ─────────────────────────────
+# 6. FRONTEND DEPLOY (S3) 
+# ─────────────────────────────
+  frontend:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync frontend/dist s3://emp-mgmt-frontend --delete
