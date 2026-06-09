@@ -10,11 +10,6 @@ const PORT = process.env.PORT || 3000;
         await sequelize.authenticate(); // test connection
         console.log(' Database connected');
 
-
-        await sequelize.sync({ alter: true });
-        //await sequelize.sync();
-
-        // alter: true will adjust tables to match models (use cautiously in production)
         console.log('Models synchronized');
 
         app.listen(PORT, () => {
