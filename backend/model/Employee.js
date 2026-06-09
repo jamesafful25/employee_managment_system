@@ -30,7 +30,8 @@ const Employee = sequelize.define('Employee', {
     reset_password_expires: {
         type: DataTypes.DATE,
         allowNull: true,
-    },
+    }
+}, {
     timestamps: true
 });
 
