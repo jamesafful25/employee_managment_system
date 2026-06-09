@@ -50,8 +50,10 @@ module "ecs" {
   target_group_arn      = module.alb.target_group_arn
   vpc_id                = module.vpc.vpc_id
   alb_security_group_id = module.alb.alb_security_group_id
-  db_host               = module.rds.db_host
-  db_port               = module.rds.db_port
+  db_host               = module.rds.endpoint
+  db_port               = "3306"
+  db_user               = "admin"
+  db_name               = var.db_name
 }
 
 

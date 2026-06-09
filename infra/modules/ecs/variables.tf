@@ -38,10 +38,21 @@ variable "alb_security_group_id" {
   type = string
 }
 
+# -------------------------
+# DATABASE CONFIG (CLEAN)
+# -------------------------
 variable "db_host" {
   type = string
 }
 
 variable "db_port" {
+  type = string
+}
+
+variable "db_user" {
+  type = string
+}
+
+variable "db_name" {
   type = string
 }
