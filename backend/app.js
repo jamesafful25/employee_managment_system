@@ -36,6 +36,20 @@ app.use(cors({
 app.use(rateLimiter); // global
 app.use(passport.initialize());
 
+// health check endpoint 
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'ok',
+        service: 'emp-mgmt-api',
+        uptime: process.uptime()
+    });
+});
+
+// optional root check (helps debugging)
+app.get('/', (req, res) => {
+    res.status(200).send('OK');
+});
+
 // routes
 app.use('/api/auth', authRateLimiter, authRoutes);
 app.use('/api/employees', employeeRoutes);
