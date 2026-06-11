@@ -29,10 +29,12 @@ app.use(express.urlencoded({ extended: true }));
 
 // security + middleware order
 app.use(helmet());
+
 app.use(cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true
+    origin: '*',
+    credentials: false
 }));
+
 app.use(rateLimiter); // global
 app.use(passport.initialize());
 
