@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // This is your backend base URL
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000/api',
+    baseURL: 'http://emp-mgmt-alb-910736225.us-east-1.elb.amazonaws.com/api',
     headers: {
         'Content-Type': 'application/json',
     },
