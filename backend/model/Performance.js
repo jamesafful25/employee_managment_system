@@ -9,6 +9,10 @@ const Performance = sequelize.define('Performance', {
     goals: { type: DataTypes.TEXT, allowNull: true },
     comments: { type: DataTypes.TEXT, allowNull: true },
     review_date: { type: DataTypes.DATEONLY, allowNull: false },
+}, {
+    tableName: 'performances',
+    freezeTableName: true,
+    timestamps: false
 });
 
 module.exports = Performance;

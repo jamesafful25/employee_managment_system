@@ -7,12 +7,19 @@ const Attendance = sequelize.define('Attendance', {
     clock_in: { type: DataTypes.DATE, allowNull: false },
     clock_out: { type: DataTypes.DATE, allowNull: true },
     date: { type: DataTypes.DATEONLY, allowNull: false },
-    status: { type: DataTypes.ENUM('present', 'absent', 'late', 'half_day'), defaultValue: 'present' },
+    status: {
+        type: DataTypes.ENUM('present', 'absent', 'late', 'half_day'),
+        defaultValue: 'present'
+    },
     hours_worked: {
         type: DataTypes.DECIMAL(5, 2),
         allowNull: true,
         defaultValue: 0,
     },
+}, {
+    tableName: 'attendances',
+    freezeTableName: true,
+    timestamps: false
 });
 
 module.exports = Attendance;

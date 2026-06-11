@@ -18,6 +18,10 @@ const Payroll = sequelize.define('Payroll', {
     net_salary: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
     status: { type: DataTypes.ENUM('pending', 'paid'), defaultValue: 'pending' },
     paid_at: { type: DataTypes.DATE, allowNull: true },
+}, {
+    tableName: 'payrolls',
+    freezeTableName: true,
+    timestamps: false
 });
 
 module.exports = Payroll;

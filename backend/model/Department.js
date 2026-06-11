@@ -5,6 +5,10 @@ const Department = sequelize.define('Department', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: false, unique: true },
     manager_id: { type: DataTypes.INTEGER, allowNull: true },
+}, {
+    tableName: 'departments',
+    freezeTableName: true,
+    timestamps: false
 });
 
 module.exports = Department;

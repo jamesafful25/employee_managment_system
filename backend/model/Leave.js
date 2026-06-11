@@ -9,8 +9,15 @@ const Leave = sequelize.define('Leave', {
     end_date: { type: DataTypes.DATEONLY, allowNull: false },
     total_days: { type: DataTypes.INTEGER, allowNull: false },
     reason: { type: DataTypes.TEXT, allowNull: true },
-    status: { type: DataTypes.ENUM('pending', 'approved', 'rejected'), defaultValue: 'pending' },
+    status: {
+        type: DataTypes.ENUM('pending', 'approved', 'rejected'),
+        defaultValue: 'pending'
+    },
     approved_by: { type: DataTypes.INTEGER, allowNull: true },
+}, {
+    tableName: 'leaves',
+    freezeTableName: true,
+    timestamps: false
 });
 
 module.exports = Leave;
