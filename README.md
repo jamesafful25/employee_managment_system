@@ -149,7 +149,7 @@ JWT_EXPIRES_IN=7d
 
 ---
 
-## 🧪 How to Run Locally
+##  How to Run Locally
 
 ### Backend
 ```bash
