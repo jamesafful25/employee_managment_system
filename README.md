@@ -156,11 +156,15 @@ Automates:
 PORT=3000
 
 DB_HOST=your-rds-endpoint
+
 DB_USER=admin
+
 DB_PASSWORD=your_password
+
 DB_NAME=empdb
 
 JWT_SECRET=your_jwt_secret
+
 JWT_EXPIRES_IN=7d
 
 
