@@ -192,40 +192,50 @@ cd frontend
 npm install
 npm start
 
- Docker Setup
+---
+
+## Docker Setup
 docker-compose up --build
 
-Database Migration
+---
+
+## Database Migration
 
 Sequelize handles schema sync:
 
 npx sequelize db:migrate
 
-Security Notes
+---
+
+## Security Notes
 
 JWT authentication enabled
 Rate limiting for API protection
 Helmet for HTTP security headers
 CORS configured for frontend integration
 
-Lessons Learned
+---
+## Lessons Learned
 
 This project provided hands-on experience with:
+- Designing scalable cloud architecture on AWS
+- Deploying containerized applications with ECS Fargate
+- Infrastructure as Code using Terraform
+- CI/CD automation with GitHub Actions
+- Debugging distributed systems in production
+- Secure authentication and authorization systems
+- Full-stack integration of frontend, backend, and database systems
 
-   AWS ECS Fargate deployment
-   Load balancer routing & networking
-   RDS database integration
-   Terraform infrastructure automation
-   CI/CD pipeline design
-   Debugging distributed systems
-   Production-level authentication handling
+---
 
-Author
+## Author
 
 James Afful
 
    Full Stack Developer
    DevOps Engineer (AWS | Terraform | Docker | CI/CD)
+
+---
 
 Status
 
