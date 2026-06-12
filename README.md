@@ -71,11 +71,11 @@ Amazon RDS (MySQL)
 - Tax computation
 - Bonus & deductions
 
-### 📊 Performance Management
+###  Performance Management
 - Employee performance reviews
 - Ratings and feedback
 
-### 🔐 Authentication
+###  Authentication
 - JWT-based authentication
 - Secure login system
 - Token blacklist support
