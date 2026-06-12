@@ -9,12 +9,16 @@ The system manages employees, departments, attendance, payroll, leave management
 ##  Architecture Overview
 Frontend (React - S3 Static Hosting)
 ↓
+
 Amazon CloudFront (optional enhancement)
 ↓
+
 Application Load Balancer (ALB)
 ↓
+
 ECS Fargate (Node.js/Express API)
 ↓
+
 Amazon RDS (MySQL)
 
 
