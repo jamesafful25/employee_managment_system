@@ -1,1 +1,3 @@
 alert_email = "james.afful47@gmail.com"
+jwt_secret = "104b6098098d8d512b7f817f12657bc188e34d64eaaf432f43b009d40503f96e1382c32563025d475f8e4bed41b28bda3d9f6cf313525eea4c147123b5cac80e"
+jwt_expires_in = "7d"

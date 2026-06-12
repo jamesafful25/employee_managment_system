@@ -8,3 +8,9 @@ variable "desired_count" { default = 2 }
 variable "alert_email" {
   type = string
 }
+variable "jwt_secret" {
+  type = string
+}
+variable "jwt_expires_in" {
+  type = string
+}

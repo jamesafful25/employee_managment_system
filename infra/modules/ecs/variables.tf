@@ -56,3 +56,11 @@ variable "db_user" {
 variable "db_name" {
   type = string
 }
+
+variable "jwt_secret" {
+  type = string
+}
+
+variable "jwt_expires_in" {
+  type = string
+}

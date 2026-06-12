@@ -51,6 +51,14 @@ resource "aws_ecs_task_definition" "app" {
         {
           name  = "DB_NAME"
           value = var.db_name
+        },
+        {
+          name  = "JWT_SECRET"
+          value = var.jwt_secret
+        },
+        {
+          name  = "JWT_EXPIRES_IN"
+          value = var.jwt_expires_in
         }
       ]
 

@@ -1,5 +1,9 @@
 const express = require('express');
 const app = express();
+
+// Trust AWS ALB / reverse proxy
+app.set('trust proxy', 1);
+
 const helmet = require('helmet');
 const cors = require('cors');
 const path = require('path');
@@ -26,8 +30,7 @@ const errorHandleMiddleware = require('./middleware/errorHandleMiddleware');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-// security + middleware order
+// security middleware
 app.use(helmet());
 
 app.use(cors({
@@ -35,10 +38,13 @@ app.use(cors({
     credentials: false
 }));
 
-app.use(rateLimiter); // global
+// rate limiting
+app.use(rateLimiter);
+
+// passport
 app.use(passport.initialize());
 
-// health check endpoint 
+// health check endpoint
 app.get('/health', (req, res) => {
     res.status(200).json({
         status: 'ok',
@@ -47,7 +53,7 @@ app.get('/health', (req, res) => {
     });
 });
 
-// optional root check (helps debugging)
+// root endpoint
 app.get('/', (req, res) => {
     res.status(200).send('OK');
 });
@@ -65,11 +71,10 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
-//express static middleware
+// static uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// error handler — MUST be last
+// error handler (must be last)
 app.use(errorHandleMiddleware);
-
 
 module.exports = app;

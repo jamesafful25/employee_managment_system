@@ -4,14 +4,24 @@ const rateLimit = require('express-rate-limit');
 const rateLimiter = rateLimit({
     windowMs: 5 * 60 * 1000,
     max: 300,
-    message: { status: 'error', message: 'Too many requests, try again after 2 minutes' },
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: {
+        status: 'error',
+        message: 'Too many requests, try again after 5 minutes'
+    }
 });
 
-// stricter for auth routes — prevent brute force
+// auth routes
 const authRateLimiter = rateLimit({
     windowMs: 5 * 60 * 1000,
-    max: 10, // only 10 attempts per 15 mins
-    message: { status: 'error', message: 'Too many login attempts, try again after 2 minutes' },
+    max: 10,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: {
+        status: 'error',
+        message: 'Too many login attempts, try again after 5 minutes'
+    }
 });
 
 module.exports = { rateLimiter, authRateLimiter };

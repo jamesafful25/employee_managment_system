@@ -50,6 +50,8 @@ module "ecs" {
   target_group_arn      = module.alb.target_group_arn
   vpc_id                = module.vpc.vpc_id
   alb_security_group_id = module.alb.alb_security_group_id
+  jwt_secret = var.jwt_secret 
+  jwt_expires_in  = var.jwt_expires_in 
   db_host               = module.rds.db_host
   db_port               = "3306"
   db_user               = "admin"
