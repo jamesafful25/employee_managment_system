@@ -55,34 +55,55 @@ Amazon RDS (MySQL)
 
 ###  Employee Management
 - Create, update, delete employees
-- Role-based access (Admin, HR, Manager, Employee)
+- View employee profiles
+- Role-based access control (Admin, HR, Manager, Employee)
 
 ### Department Management
 - Create and manage departments
 - Assign managers
+- Organize employees by department
 
 ###  Attendance Tracking
 - Clock-in / clock-out
 - Work hour calculation
+- Daily attendance records
 
 ###  Leave Management
 - Leave requests
 - Approval workflow
 - Leave balance tracking
+- Leave history per employee
 
 ###  Payroll System
-- Salary calculation
+- Salary calculation (basic, bonus, deductions, tax)
 - Tax computation
 - Bonus & deductions
+- Payroll status tracking (pending/paid)
+- Monthly payroll generation
 
 ###  Performance Management
 - Employee performance reviews
 - Ratings and feedback
+- Performance history tracking
+
+###  File Upload System
+- Upload employee-related documents
+- Store files securely in cloud storage (S3/local uploads)
+- Retrieve and manage uploaded files
+
+###  Reporting System
+- Generate reports in PDF format
+- Export reports to Excel format
+- Payroll, attendance, and employee summary reports
+ 
 
 ###  Authentication
 - JWT-based authentication
 - Secure login system
 - Token blacklist support
+- Password encryption (bcrypt)
+- Change password functionality
+- Forgot password / reset password flow (email/token-based)
 
 ---
 
