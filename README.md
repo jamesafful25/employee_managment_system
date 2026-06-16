@@ -1,227 +1,236 @@
-🚀 Employee Management System (AWS Full-Stack DevOps Platform)
+# 🚀 Employee Management System
 
-A production-grade, cloud-native Employee Management System deployed on AWS using modern DevOps practices, including Terraform (IaC), ECS Fargate, ALB, RDS, S3, ECR, and GitHub Actions with OIDC authentication (no long-lived AWS credentials).
+### Production-Grade AWS Full-Stack DevOps Platform
 
-This project demonstrates end-to-end design and deployment of a scalable, secure, and automated cloud architecture following real-world production patterns.
+---
 
-🧠 Why This Project Matters
+## 📌 Overview
 
-This is not a simple CRUD application.
+This project is a **cloud-native Employee Management System** deployed on AWS using modern DevOps practices.
 
-It demonstrates:
+It demonstrates a complete production-style architecture including:
 
-Cloud architecture design on AWS (VPC, ECS, RDS, ALB)
-Secure CI/CD with GitHub OIDC → AWS IAM Role Assumption (no static keys)
-Infrastructure as Code using modular Terraform
-Containerized microservice deployment (Docker + ECS Fargate)
-Production-grade networking (public/private subnets + NAT Gateway)
-Secrets management using AWS Secrets Manager
-Observability using CloudWatch + SNS alerts
-🏗️ High-Level Architecture
-Frontend (React - S3 Static Hosting)
-        ↓
-(Optional CloudFront CDN)
+* Infrastructure as Code (Terraform)
+* Containerized backend (Docker + ECS Fargate)
+* Secure CI/CD pipeline (GitHub Actions + OIDC)
+* Scalable AWS networking (VPC, ALB, RDS)
+* Centralized secrets management (AWS Secrets Manager)
+* Monitoring and alerting (CloudWatch + SNS)
+
+---
+
+## 🧠 Architecture Overview
+
+> High-level system design
+
+```
+Frontend (React on S3)
         ↓
 Application Load Balancer (ALB)
         ↓
-ECS Fargate (Node.js / Express API)
+ECS Fargate (Node.js API)
         ↓
-Amazon RDS (MySQL Database)
-🔐 CI/CD Architecture (OIDC Secure Deployment)
-GitHub Repository
-        ↓
-GitHub Actions Pipeline
-        ↓
-OIDC Authentication (Assume AWS IAM Role)
-        ↓
-Docker Build (Backend)
-        ↓
-Push Image → Amazon ECR
-        ↓
-Update ECS Service (Zero Downtime Deployment)
+Amazon RDS (MySQL)
+```
 
-✔ No AWS access keys stored in GitHub
-✔ Temporary role-based authentication (OIDC)
-✔ Secure, production-grade deployment pipeline
+---
 
-🧰 Tech Stack
+## 🔐 CI/CD Pipeline (OIDC Secure Deployment)
 
-Backend
--Node.js
--Express.js
--Sequelize ORM
--MySQL (AWS RDS)
--JWT Authentication
--Passport.js
+```
+GitHub Push
+    ↓
+GitHub Actions
+    ↓
+OIDC Authentication (No AWS keys)
+    ↓
+Docker Build
+    ↓
+Push to ECR
+    ↓
+Terraform / ECS Deployment
+```
 
-Frontend
--React.js
-Axios
+✔ No static AWS credentials
+✔ Temporary IAM role assumption
+✔ Production-grade secure pipeline
 
-AWS S3 Static Hosting
--DevOps / Cloud
--AWS ECS (Fargate)
--AWS ALB (Application Load Balancer)
-AWS RDS (MySQL)
-AWS VPC (Custom networking)
-AWS ECR (Container registry)
-AWS S3 (Frontend hosting)
-AWS Secrets Manager
-AWS CloudWatch + SNS (Monitoring)
-Terraform (Infrastructure as Code)
-GitHub Actions (CI/CD with OIDC)
-Docker
+---
 
+## 🧰 Tech Stack
 
-🏛️ Infrastructure as Code (Terraform)
+### Backend
 
-The entire AWS infrastructure is modularized using Terraform:
+* Node.js
+* Express.js
+* Sequelize ORM
+* MySQL (AWS RDS)
+* JWT Authentication
 
+### Frontend
+
+* React.js
+* Axios
+* Hosted on AWS S3
+
+### DevOps / Cloud
+
+* AWS ECS (Fargate)
+* AWS ALB
+* AWS VPC (custom networking)
+* AWS RDS (MySQL)
+* AWS ECR
+* AWS S3
+* AWS Secrets Manager
+* AWS CloudWatch + SNS
+* Terraform (IaC)
+* GitHub Actions (CI/CD)
+* Docker
+
+---
+
+## 🏗️ Infrastructure (Terraform Modules)
+
+Modular infrastructure design:
+
+```
 infra/
-│── modules/
-│   ├── vpc/
-│   ├── ecs/
-│   ├── alb/
-│   ├── rds/
-│   ├── ecr/
-│   ├── s3-frontend/
-│   ├── monitoring/
-│   └── secrets-manager/
-│
-│── main.tf (orchestrates modules)
-│── variables.tf
-│── outputs.tf
-│── backend.tf (remote state: S3 + DynamoDB)
+ ├── modules/
+ │   ├── vpc
+ │   ├── ecs
+ │   ├── alb
+ │   ├── rds
+ │   ├── ecr
+ │   ├── s3-frontend
+ │   ├── monitoring
+ │   └── secrets-manager
+ │
+ ├── main.tf
+ ├── variables.tf
+ ├── outputs.tf
+ ├── backend.tf
+```
 
-✔ Fully modular architecture
-✔ Reusable infrastructure components
+✔ Fully modular
+✔ Reusable components
 ✔ Clean separation of concerns
 
-🔐 Security Architecture
-JWT-based authentication
-Role-Based Access Control (Admin, HR, Manager, Employee)
-AWS IAM least-privilege roles
-GitHub Actions OIDC authentication (no static credentials)
-Secrets stored in AWS Secrets Manager (not in .env)
-Private subnets for ECS + RDS isolation
-Security groups controlling service-to-service traffic
-📊 Monitoring & Observability
-CloudWatch Logs for ECS containers
-CloudWatch Alarms:
-ECS CPU utilization
-RDS CPU utilization
-ALB 5XX error monitoring
-SNS email alerts for system anomalies
-⚙️ Core Features
-👥 Employee Management
-Create, update, delete employees
-Role-based profiles
-🏢 Department Management
-Department creation and assignment
-Manager allocation
-⏱ Attendance System
-Clock-in / clock-out tracking
-Work hour calculations
-🏖 Leave Management
-Leave requests & approval workflow
-Leave balance tracking
-💰 Payroll System
-Salary calculations
-Tax and deduction handling
-Monthly payroll processing
-📊 Performance Reviews
-Employee evaluations
-Rating and feedback system
-📁 File Upload System
-Upload documents to S3
-Secure file retrieval
-🧪 Running Locally
-Backend
-cd backend
-npm install
-npm run dev
-Frontend
-cd frontend
-npm install
-npm start
-Docker
-docker-compose up --build
-🚀 Deployment Workflow
-Push code to GitHub
-GitHub Actions triggers pipeline
-Docker image built
-Image pushed to AWS ECR
-ECS service updated automatically
-New version deployed with zero downtime
-📸 UI Screenshots
-## 📸 Application Screenshots
+---
 
-### 🔐 Login
+## 🔐 Security Design
 
-### 📊 Dashboard Overview
+* JWT authentication
+* Role-Based Access Control (Admin / HR / Manager / Employee)
+* IAM least-privilege policies
+* GitHub OIDC authentication (no static keys)
+* Secrets stored in AWS Secrets Manager
+* Private subnets for ECS & RDS
+* Security groups for service isolation
 
-### 📈 Dashboard Analytics
+---
 
-### 👥 Employee Management
+## 📊 Monitoring & Observability
 
-### 🏢 Department Management
+* CloudWatch logs for ECS containers
+* CloudWatch alarms:
 
-### ⏱ Attendance Management
+  * ECS CPU utilization
+  * RDS CPU utilization
+  * ALB 5XX errors
+* SNS email alerts for system issues
 
-### 🏖 Leave Management
+---
 
-### ✅ Leave Approval Workflow
+## ⚙️ Core Features
 
-### 💰 Payroll Management
+* 👥 Employee management (CRUD)
+* 🏢 Department management
+* ⏱ Attendance tracking
+* 🏖 Leave management workflow
+* 💰 Payroll system
+* 📈 Performance reviews
+* 📄 Reporting system
+* 📤 File upload (S3 storage)
+* 🔐 Secure authentication system
 
-### 📄 Payroll Details
+---
 
-### 📈 Performance Management
+## 📸 UI Screenshots
 
-### 📊 Reporting System
+### Layout (replace with your images)
 
-### 📋 Report Details
+| Login                      | Dashboard                               |
+| -------------------------- | --------------------------------------- |
+| ![](screenshots/login.png) | ![](screenshots/dashboard-overview.png) |
 
-### 👤 User Profile
+| Employees                      | Departments                     |
+| ------------------------------ | ------------------------------- |
+| ![](screenshots/employees.png) | ![](screenshots/department.png) |
 
-### 📤 Document Upload
+| Attendance                      | Leave                      |
+| ------------------------------- | -------------------------- |
+| ![](screenshots/attendance.png) | ![](screenshots/leave.png) |
 
+| Payroll                      | Performance                      |
+| ---------------------------- | -------------------------------- |
+| ![](screenshots/payroll.png) | ![](screenshots/performance.png) |
 
-Login Page
-Dashboard
-Employee Management UI
-Payroll System
-Leave Approval System
-Performance Review UI
-🧠 Key Engineering Learnings
-Designing production-grade AWS architectures
-Terraform modular infrastructure design
-ECS Fargate container orchestration
-CI/CD automation using GitHub Actions + OIDC
-Secure secret management in AWS Secrets Manager
-Debugging distributed cloud systems
-Cost awareness in cloud architecture
-End-to-end full-stack cloud deployment
-💡 What Makes This Project Stand Out
+| Reports                     | Profile                      |
+| --------------------------- | ---------------------------- |
+| ![](screenshots/report.png) | ![](screenshots/profile.png) |
 
-✔ Real production-style AWS architecture
-✔ Secure CI/CD using OIDC (no static credentials)
+---
+
+## 🚀 Deployment Workflow
+
+```
+Push to GitHub
+→ GitHub Actions triggered
+→ Docker image built
+→ Image pushed to ECR
+→ ECS service updated
+→ Zero-downtime deployment
+```
+
+---
+
+## 🧠 Key Engineering Highlights
+
+* Production-grade AWS architecture design
+* Terraform modular infrastructure
+* Secure CI/CD with GitHub OIDC
+* Container orchestration with ECS Fargate
+* Secrets management with AWS Secrets Manager
+* Observability with CloudWatch + SNS
+* Scalable VPC networking design
+* Full-stack cloud deployment
+
+---
+
+## 💡 What Makes This Project Stand Out
+
+✔ Real AWS production architecture (not tutorial-level)
+✔ Secure CI/CD without AWS access keys
 ✔ Fully containerized backend deployment
-✔ Infrastructure as Code (Terraform modules)
+✔ Modular Terraform design
 ✔ Proper networking (VPC + private subnets)
 ✔ Monitoring + alerting system implemented
-✔ Cloud-native full-stack system
+✔ End-to-end cloud-native system
 
-👤 Author
+---
 
-James Afful
+## 👤 Author
+
+**James Afful**
 Full Stack Developer | DevOps Engineer
 AWS | Terraform | Docker | CI/CD | Kubernetes (Learning)
 
-📌 Status
+---
+
+## 📌 Status
 
 ✔ Fully deployed on AWS
-✔ Production-style architecture implemented
 ✔ CI/CD pipeline active
-✔ Monitoring and alerting enabled
-✔ Cost-controlled learning environment completed
+✔ Monitoring enabled
+✔ Infrastructure fully automated with Terraform
+✔ Production-style architecture implemented
