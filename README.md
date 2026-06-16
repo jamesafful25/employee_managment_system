@@ -1,246 +1,222 @@
-# Employee Management System (AWS Full-Stack Deployment)
+🚀 Employee Management System (AWS Full-Stack DevOps Platform)
 
-A full-stack **Employee Management System** deployed on AWS using modern DevOps practices including **Terraform, Docker, ECS Fargate, RDS, S3, and CI/CD with GitHub Actions**.
+A production-grade, cloud-native Employee Management System deployed on AWS using modern DevOps practices, including Terraform (IaC), ECS Fargate, ALB, RDS, S3, ECR, and GitHub Actions with OIDC authentication (no long-lived AWS credentials).
 
-The system manages employees, departments, attendance, payroll, leave management, and performance reviews with secure authentication and role-based access control.
+This project demonstrates end-to-end design and deployment of a scalable, secure, and automated cloud architecture following real-world production patterns.
 
----
+🧠 Why This Project Matters
 
-##  Architecture Overview
+This is not a simple CRUD application.
+
+It demonstrates:
+
+Cloud architecture design on AWS (VPC, ECS, RDS, ALB)
+Secure CI/CD with GitHub OIDC → AWS IAM Role Assumption (no static keys)
+Infrastructure as Code using modular Terraform
+Containerized microservice deployment (Docker + ECS Fargate)
+Production-grade networking (public/private subnets + NAT Gateway)
+Secrets management using AWS Secrets Manager
+Observability using CloudWatch + SNS alerts
+🏗️ High-Level Architecture
 Frontend (React - S3 Static Hosting)
-                          ↓
-
-Amazon CloudFront (optional enhancement)
-                          ↓
-
+        ↓
+(Optional CloudFront CDN)
+        ↓
 Application Load Balancer (ALB)
-                          ↓
+        ↓
+ECS Fargate (Node.js / Express API)
+        ↓
+Amazon RDS (MySQL Database)
+🔐 CI/CD Architecture (OIDC Secure Deployment)
+GitHub Repository
+        ↓
+GitHub Actions Pipeline
+        ↓
+OIDC Authentication (Assume AWS IAM Role)
+        ↓
+Docker Build (Backend)
+        ↓
+Push Image → Amazon ECR
+        ↓
+Update ECS Service (Zero Downtime Deployment)
 
-ECS Fargate (Node.js/Express API)
-                         ↓
+✔ No AWS access keys stored in GitHub
+✔ Temporary role-based authentication (OIDC)
+✔ Secure, production-grade deployment pipeline
 
-Amazon RDS (MySQL)
+🧰 Tech Stack
+Backend
+Node.js
+Express.js
+Sequelize ORM
+MySQL (AWS RDS)
+JWT Authentication
+Passport.js
+Frontend
+React.js
+Axios
+AWS S3 Static Hosting
+DevOps / Cloud
+AWS ECS (Fargate)
+AWS ALB (Application Load Balancer)
+AWS RDS (MySQL)
+AWS VPC (Custom networking)
+AWS ECR (Container registry)
+AWS S3 (Frontend hosting)
+AWS Secrets Manager
+AWS CloudWatch + SNS (Monitoring)
+Terraform (Infrastructure as Code)
+GitHub Actions (CI/CD with OIDC)
+Docker
+🏛️ Infrastructure as Code (Terraform)
 
+The entire AWS infrastructure is modularized using Terraform:
 
----
+infra/
+│── modules/
+│   ├── vpc/
+│   ├── ecs/
+│   ├── alb/
+│   ├── rds/
+│   ├── ecr/
+│   ├── s3-frontend/
+│   ├── monitoring/
+│   └── secrets-manager/
+│
+│── main.tf (orchestrates modules)
+│── variables.tf
+│── outputs.tf
+│── backend.tf (remote state: S3 + DynamoDB)
 
-##  Tech Stack
+✔ Fully modular architecture
+✔ Reusable infrastructure components
+✔ Clean separation of concerns
 
-### Backend
-- Node.js
-- Express.js
-- Sequelize ORM
-- MySQL (Amazon RDS)
-- JWT Authentication
-- Passport.js
-
-### Frontend
-- React.js
-- Axios
-- Hosted on AWS S3 Static Website Hosting
-
-### Infrastructure (DevOps)
-- AWS ECS (Fargate)
-- AWS ALB (Application Load Balancer)
-- AWS RDS (MySQL)
-- AWS S3
-- AWS ECR
-- Terraform (Infrastructure as Code)
-- GitHub Actions (CI/CD)
-- Docker
-
----
-
-## Features
-
-###  Employee Management
-- Create, update, delete employees
-- View employee profiles
-- Role-based access control (Admin, HR, Manager, Employee)
-
-### Department Management
-- Create and manage departments
-- Assign managers
-- Organize employees by department
-
-###  Attendance Tracking
-- Clock-in / clock-out
-- Work hour calculation
-- Daily attendance records
-
-###  Leave Management
-- Leave requests
-- Approval workflow
-- Leave balance tracking
-- Leave history per employee
-
-###  Payroll System
-- Salary calculation (basic, bonus, deductions, tax)
-- Tax computation
-- Bonus & deductions
-- Payroll status tracking (pending/paid)
-- Monthly payroll generation
-
-###  Performance Management
-- Employee performance reviews
-- Ratings and feedback
-- Performance history tracking
-
-###  File Upload System
-- Upload employee-related documents
-- Store files securely in cloud storage (S3/local uploads)
-- Retrieve and manage uploaded files
-
-###  Reporting System
-- Generate reports in PDF format
-- Export reports to Excel format
-- Payroll, attendance, and employee summary reports
- 
-
-###  Authentication
-- JWT-based authentication
-- Secure login system
-- Token blacklist support
-- Password encryption (bcrypt)
-- Change password functionality
-- Forgot password / reset password flow (email/token-based)
-
----
-
-## Infrastructure (Terraform)
-
-Terraform provisions:
-
-- VPC (Networking layer)
-- Public & private subnets
-- ECS Cluster (Fargate)
-- Application Load Balancer
-- RDS MySQL instance
-- S3 bucket for frontend hosting
-- Security Groups & IAM roles
-
----
-
-## CI/CD Pipeline (GitHub Actions)
-
-### Pipeline Flow:
-
-GitHub Push → GitHub Actions → Docker Build → Push to ECR → ECS Deployment
-
-
-Automates:
-- Backend container build
-- Image push to ECR
-- ECS service update
-- Zero-downtime deployment
-
----
-
-##  Environment Variables
-
-### Backend (.env)
-
-
-Automates:
-- Backend container build
-- Image push to ECR
-- ECS service update
-- Zero-downtime deployment
-
----
-
-##  Environment Variables
-
-### Backend (.env)
-
-PORT=3000
-
-DB_HOST=your-rds-endpoint
-
-DB_USER=admin
-
-DB_PASSWORD=your_password
-
-DB_NAME=empdb
-
-JWT_SECRET=your_jwt_secret
-
-JWT_EXPIRES_IN=7d
-
-
----
-
-## Deployment URLs
-
-### Frontend (S3)
-
-/health
-
----
-
-##  How to Run Locally
-
-### Backend
-```bash
+🔐 Security Architecture
+JWT-based authentication
+Role-Based Access Control (Admin, HR, Manager, Employee)
+AWS IAM least-privilege roles
+GitHub Actions OIDC authentication (no static credentials)
+Secrets stored in AWS Secrets Manager (not in .env)
+Private subnets for ECS + RDS isolation
+Security groups controlling service-to-service traffic
+📊 Monitoring & Observability
+CloudWatch Logs for ECS containers
+CloudWatch Alarms:
+ECS CPU utilization
+RDS CPU utilization
+ALB 5XX error monitoring
+SNS email alerts for system anomalies
+⚙️ Core Features
+👥 Employee Management
+Create, update, delete employees
+Role-based profiles
+🏢 Department Management
+Department creation and assignment
+Manager allocation
+⏱ Attendance System
+Clock-in / clock-out tracking
+Work hour calculations
+🏖 Leave Management
+Leave requests & approval workflow
+Leave balance tracking
+💰 Payroll System
+Salary calculations
+Tax and deduction handling
+Monthly payroll processing
+📊 Performance Reviews
+Employee evaluations
+Rating and feedback system
+📁 File Upload System
+Upload documents to S3
+Secure file retrieval
+🧪 Running Locally
+Backend
 cd backend
 npm install
 npm run dev
-
 Frontend
-
 cd frontend
 npm install
 npm start
-
----
-
-## Docker Setup
+Docker
 docker-compose up --build
+🚀 Deployment Workflow
+Push code to GitHub
+GitHub Actions triggers pipeline
+Docker image built
+Image pushed to AWS ECR
+ECS service updated automatically
+New version deployed with zero downtime
+📸 UI Screenshots
+## 📸 Application Screenshots
 
----
+### 🔐 Login
 
-## Database Migration
+### 📊 Dashboard Overview
 
-Sequelize handles schema sync:
+### 📈 Dashboard Analytics
 
-npx sequelize db:migrate
+### 👥 Employee Management
 
----
+### 🏢 Department Management
 
-## Security Notes
+### ⏱ Attendance Management
 
-JWT authentication enabled
-Rate limiting for API protection
-Helmet for HTTP security headers
-CORS configured for frontend integration
+### 🏖 Leave Management
 
----
-## Lessons Learned
+### ✅ Leave Approval Workflow
 
-This project provided hands-on experience with:
-- Designing scalable cloud architecture on AWS
-- Deploying containerized applications with ECS Fargate
-- Infrastructure as Code using Terraform
-- CI/CD automation with GitHub Actions
-- Debugging distributed systems in production
-- Secure authentication and authorization systems
-- Full-stack integration of frontend, backend, and database systems
+### 💰 Payroll Management
 
----
+### 📄 Payroll Details
 
-## Author
+### 📈 Performance Management
+
+### 📊 Reporting System
+
+### 📋 Report Details
+
+### 👤 User Profile
+
+### 📤 Document Upload
+
+
+Login Page
+Dashboard
+Employee Management UI
+Payroll System
+Leave Approval System
+Performance Review UI
+🧠 Key Engineering Learnings
+Designing production-grade AWS architectures
+Terraform modular infrastructure design
+ECS Fargate container orchestration
+CI/CD automation using GitHub Actions + OIDC
+Secure secret management in AWS Secrets Manager
+Debugging distributed cloud systems
+Cost awareness in cloud architecture
+End-to-end full-stack cloud deployment
+💡 What Makes This Project Stand Out
+
+✔ Real production-style AWS architecture
+✔ Secure CI/CD using OIDC (no static credentials)
+✔ Fully containerized backend deployment
+✔ Infrastructure as Code (Terraform modules)
+✔ Proper networking (VPC + private subnets)
+✔ Monitoring + alerting system implemented
+✔ Cloud-native full-stack system
+
+👤 Author
 
 James Afful
+Full Stack Developer | DevOps Engineer
+AWS | Terraform | Docker | CI/CD | Kubernetes (Learning)
 
-   Full Stack Developer
-   DevOps Engineer (AWS | Terraform | Docker | CI/CD)
+📌 Status
 
----
-
-Status
-
- Fully deployed and functional
- Production-ready full-stack system
- End-to-end AWS architecture implemented
-
-
+✔ Fully deployed on AWS
+✔ Production-style architecture implemented
+✔ CI/CD pipeline active
+✔ Monitoring and alerting enabled
+✔ Cost-controlled learning environment completed
