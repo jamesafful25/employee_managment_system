@@ -52,7 +52,9 @@ Terraform / ECS Deployment
 ```
 
 ✔ No static AWS credentials
+
 ✔ Temporary IAM role assumption
+
 ✔ Production-grade secure pipeline
 
 ---
@@ -111,9 +113,9 @@ infra/
  ├── backend.tf
 ```
 
-✔ Fully modular
-✔ Reusable components
-✔ Clean separation of concerns
+-Fully modular
+-Reusable components
+-Clean separation of concerns
 
 ---
 
@@ -209,13 +211,13 @@ Push to GitHub
 
 ## 💡 What Makes This Project Stand Out
 
-✔ Real AWS production architecture (not tutorial-level)
-✔ Secure CI/CD without AWS access keys
-✔ Fully containerized backend deployment
-✔ Modular Terraform design
-✔ Proper networking (VPC + private subnets)
-✔ Monitoring + alerting system implemented
-✔ End-to-end cloud-native system
+-Real AWS production architecture (not tutorial-level)
+-Secure CI/CD without AWS access keys
+-Fully containerized backend deployment
+-Modular Terraform design
+-Proper networking (VPC + private subnets)
+-Monitoring + alerting system implemented
+-End-to-end cloud-native system
 
 ---
 
@@ -229,8 +231,8 @@ AWS | Terraform | Docker | CI/CD | Kubernetes (Learning)
 
 ## 📌 Status
 
-✔ Fully deployed on AWS
-✔ CI/CD pipeline active
-✔ Monitoring enabled
-✔ Infrastructure fully automated with Terraform
-✔ Production-style architecture implemented
+-Fully deployed on AWS
+-CI/CD pipeline active
+-Monitoring enabled
+-Infrastructure fully automated with Terraform
+-Production-style architecture implemented
