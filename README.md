@@ -45,20 +45,23 @@ Update ECS Service (Zero Downtime Deployment)
 ✔ Secure, production-grade deployment pipeline
 
 🧰 Tech Stack
+
 Backend
-Node.js
-Express.js
-Sequelize ORM
-MySQL (AWS RDS)
-JWT Authentication
-Passport.js
+-Node.js
+-Express.js
+-Sequelize ORM
+-MySQL (AWS RDS)
+-JWT Authentication
+-Passport.js
+
 Frontend
-React.js
+-React.js
 Axios
+
 AWS S3 Static Hosting
-DevOps / Cloud
-AWS ECS (Fargate)
-AWS ALB (Application Load Balancer)
+-DevOps / Cloud
+-AWS ECS (Fargate)
+-AWS ALB (Application Load Balancer)
 AWS RDS (MySQL)
 AWS VPC (Custom networking)
 AWS ECR (Container registry)
@@ -68,6 +71,8 @@ AWS CloudWatch + SNS (Monitoring)
 Terraform (Infrastructure as Code)
 GitHub Actions (CI/CD with OIDC)
 Docker
+
+
 🏛️ Infrastructure as Code (Terraform)
 
 The entire AWS infrastructure is modularized using Terraform:
