@@ -1,15 +1,13 @@
 
-# 🚀 Employee Management System  
+#  Employee Management System  
 ## Production-Grade AWS Full-Stack DevOps Platform
 
 ---
 
-# 📌 Overview
+#  Overview
 
-This project is a **cloud-native Employee Management System** deployed on AWS using modern DevOps practices.
-
+This is a cloud-native **Employee Management System** that I designed, built and deployed on AWS using modern DevOps practices..
 It demonstrates a complete production-style architecture, including:
-
 - Infrastructure as Code (Terraform)
 - Containerized backend (Docker + ECS Fargate)
 - Secure CI/CD pipeline (GitHub Actions + OIDC)
@@ -19,7 +17,7 @@ It demonstrates a complete production-style architecture, including:
 
 ---
 
-# 🧠 Architecture Overview
+#  Architecture Overview
 ```text
 Frontend (React on S3)
 ↓
@@ -30,7 +28,7 @@ ECS Fargate (Node.js API)
 Amazon RDS (MySQL)
 ```
 
-# 🔐 CI/CD Pipeline (OIDC Secure Deployment)
+#  CI/CD Pipeline (OIDC Secure Deployment)
 ```text
 GitHub Push
 ↓
@@ -45,13 +43,13 @@ Push to ECR
 Terraform / ECS Deployment
 ```
 
-✔ No static AWS credentials  
-✔ Temporary IAM role assumption  
-✔ Production-grade secure pipeline  
+- No static AWS credentials  
+- Temporary IAM role assumption  
+- Production-grade secure pipeline  
 
 ---
 
-# 🧰 Tech Stack
+#  Tech Stack
 
 ## Backend
 - Node.js
@@ -80,7 +78,7 @@ Terraform / ECS Deployment
 
 ---
 
-# 🏗️ Infrastructure (Terraform Modules)
+#  Infrastructure (Terraform Modules)
 ```bash
 infra/
 ├── modules/
@@ -99,13 +97,13 @@ infra/
 └── backend.tf
 ```
 
-✔ Modular design  
-✔ Reusable components  
-✔ Clean separation of concerns  
+- Modular design  
+- Reusable components  
+- Clean separation of concerns  
 
 ---
 
-# 🔐 Security Design
+#  Security Design
 
 - JWT Authentication
 - Role-Based Access Control (Admin / HR / Manager / Employee)
@@ -117,7 +115,7 @@ infra/
 
 ---
 
-# 📊 Monitoring & Observability
+#  Monitoring & Observability
 
 - CloudWatch logs (ECS containers)
 
@@ -129,22 +127,23 @@ infra/
 
 ---
 
-# ⚙️ Core Features
+#  Core Features
 
-- 👥 Employee Management (CRUD)
-- 🏢 Department Management
-- ⏱ Attendance Tracking
-- 🏖 Leave Workflow System
-- 💰 Payroll System
-- 📈 Performance Reviews
-- 📄 Reporting System
-- 📤 File Upload (S3)
-- 🔐 Authentication System
+-  Employee Management (CRUD)
+-  Department Management
+-  Attendance Tracking
+-  Leave Workflow System
+-  Payroll System
+-  Performance Reviews
+-  Reporting System
+-  File Upload (S3)
+-  Authentication System
 
 ---
+##  CI/CD Pipeline
+![CI/CD Pipeline](screenshots/pipeline/pipeline.png)
 
-# 📸 UI Screenshots
-
+#  UI Screenshots
 | Login | Dashboard |
 |------|-----------|
 | ![](screenshots/ui/login.png) | ![](screenshots/ui/dashboard-overview.png) |
@@ -161,9 +160,44 @@ infra/
 |--------|-------------|
 | ![](screenshots/ui/payroll.png) | ![](screenshots/ui/performance.png) |
 
+##  AWS Infrastructure (Proof of Deployment)
+
+### VPC
+![VPC](screenshots/aws/vpc.png)
+
+### ECS Cluster
+![ECS Cluster](screenshots/aws/ecs-cluster.png)
+
+### ECS Service
+![ECS Service](screenshots/aws/ecs-service.png)
+
+### Task Definition
+![Task Definition](screenshots/aws/esc-task-definition.png)
+
+### Load Balancer
+![Load Balancer](screenshots/aws/load-balancer.png)
+
+### Target Group
+![Target Group](screenshots/aws/target-group.png)
+
+### RDS Database
+![RDS](screenshots/aws/rds.png)
+
+### ECR Repository
+![ECR](screenshots/aws/ecr.png)
+
+### CloudWatch Monitoring
+![CloudWatch](screenshots/aws/cloud-watch.png)
+
+### IAM OIDC Role
+![OIDC IAM](screenshots/aws/iam-OICD-policy.png)
+
+### Secrets Manager
+![Secrets Manager](screenshots/aws/secrete-manager.png)
+
 ---
 
-# 🚀 Deployment Workflow
+#  Deployment Workflow
 ```text
 Push to GitHub
 ↓
@@ -186,10 +220,10 @@ AWS | Terraform | Docker | CI/CD | Kubernetes
 
 ---
 
-# 📌 Status
+#  Status
 
-✔ Project fully decommissioned (cost control)  
-✔ Architecture fully documented  
-✔ CI/CD pipeline implemented (OIDC secure)  
-✔ Screenshots preserved as proof of deployment  
-✔ Portfolio-ready DevOps project  
+- Project fully decommissioned (cost control)  
+- Architecture fully documented  
+- CI/CD pipeline implemented (OIDC secure)  
+- Screenshots preserved as proof of deployment  
+- Portfolio-ready DevOps project  
