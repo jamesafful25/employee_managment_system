@@ -35,7 +35,7 @@ resource "aws_db_instance" "main" {
 
   multi_az            = true
   skip_final_snapshot = true
-  deletion_protection = true
+  deletion_protection = false
 }
 
 # -----------------------------
