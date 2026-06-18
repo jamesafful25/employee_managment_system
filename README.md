@@ -224,7 +224,7 @@ Zero-Downtime Deployment
 
 **James Afful**  
 Full Stack Developer | DevOps Engineer  
-AWS | Terraform | Docker | CI/CD | Kubernetes 
+AWS | Terraform | Docker | CI/CD | Kubernetes | Linux 
 
 ---
 
