@@ -160,6 +160,14 @@ infra/
 |--------|-------------|
 | ![](screenshots/ui/payroll.png) | ![](screenshots/ui/performance.png) |
 
+| Profile | Report |
+|--------|-------------|
+| ![](screenshots/ui/profile.png) | ![](screenshots/ui/report.png) |
+
+|Upload |Report-2 |
+|--------|-------------|
+| ![](screenshots/ui/upload.png) | ![](screenshots/ui/report-2.png) |
+
 ##  AWS Infrastructure (Proof of Deployment)
 
 ### VPC
