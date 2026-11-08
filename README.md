@@ -223,8 +223,32 @@ Zero-Downtime Deployment
 # 👤 Author
 
 **James Afful**  
-Full Stack Developer | DevOps Engineer  
-AWS | Terraform | Docker | CI/CD | Kubernetes | Linux 
+**Full-Stack Developer | DevOps & Cloud Engineer | AI Automation Engineer | Data Scientist & Analytics | Economist & Financial Analyst**
+
+I am a multidisciplinary technology and finance professional with experience building full-stack web applications, designing cloud infrastructure, automating business processes, developing data-driven solutions and applying economic and financial analytics to real-world problems.
+
+I designed and developed the Expense Tracker application, including its React frontend, Node.js/Express backend, database architecture, authentication system, reporting functionality and AWS deployment infrastructure.
+
+### Core Technical Expertise
+
+- **Frontend Development:** React.js, Vite, JavaScript, Tailwind CSS, HTML5, CSS3, Recharts
+- **Backend Development:** Node.js, Express.js, Python, REST APIs, Sequelize
+- **Cloud Engineering:** AWS, Azure, Amazon ECS, ECR, RDS, S3, CloudFront, IAM
+- **DevOps & Infrastructure:** Terraform, Docker, Kubernetes, GitHub Actions, CI/CD, Infrastructure as Code
+- **AI Automation Engineering:** Python-based AI automation, OpenAI API integration, workflow automation, n8n
+- **Data Science & Analytics:** Python, SQL, Power BI, Predictive Analytics, Statistical Modelling, Data Visualization
+- **Database Technologies:** MySQL, SQL
+- **Economics & Finance:** Economic Research, Financial Modelling, Investment Analysis, Credit Risk Modelling, Corporate Finance
+
+### Professional Links
+
+- **GitHub:** https://github.com/jamesafful25
+- **Portfolio:** https://jamesafful25.github.io/james-afful-portfolio/
+- **Email:** james.afful47@gmail.com
+
+---
+
+*Designed, developed, and deployed by James Afful.*
 
 ---
 
